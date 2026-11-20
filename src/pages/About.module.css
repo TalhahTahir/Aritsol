@@ -1,0 +1,86 @@
+.sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+.side {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: var(--space-4);
+  padding: clamp(1.5rem, 1rem + 2vw, 3rem);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.side p {
+  color: var(--ink-soft);
+}
+.sideAlt {
+  border-color: var(--line);
+}
+.sideTitle {
+  font-size: var(--step-3);
+}
+
+.principles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-7) var(--space-8);
+}
+.principle {
+  display: grid;
+  gap: var(--space-3);
+  padding-left: var(--space-5);
+  border-left: 3px solid var(--accent);
+}
+.pTitle {
+  font-size: var(--step-2);
+}
+.pText {
+  color: var(--ink-soft);
+  max-width: 34em;
+}
+
+.team {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-5);
+}
+.member {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+.avatar,
+.photo {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+.photo {
+  object-fit: cover;
+}
+.avatar {
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-weight: 700;
+  font-size: var(--step-1);
+}
+.name {
+  font-weight: 700;
+  font-size: var(--step-1);
+}
+
+@media (max-width: 800px) {
+  .sides,
+  .principles {
+    grid-template-columns: 1fr;
+  }
+}

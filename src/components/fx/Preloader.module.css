@@ -1,0 +1,162 @@
+/* Charcoal and warm white only. */
+.root {
+  --pl-bg: #111215;
+  --pl-ink: #f5f3ef;
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  /* failsafe: if the script never runs, the overlay still gets out of the way */
+  animation: pl-failsafe 0.6s 10s ease forwards;
+}
+@keyframes pl-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* two halves of the same picture; they slide apart at the end */
+.panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--pl-bg);
+  will-change: transform;
+}
+.left {
+  clip-path: inset(0 calc(50% - 0.5px) 0 0); /* 1px overlap hides the seam */
+}
+.right {
+  clip-path: inset(0 0 0 50%);
+}
+/* the halves only carry the outline, and only show it for the split */
+.panelWord {
+  visibility: hidden;
+}
+
+/* guides, tagline and counter sit on top, in exactly the same layout */
+.layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.svg {
+  display: block;
+  width: min(92vw, 1100px);
+  height: auto;
+  overflow: visible;
+}
+.meta,
+.metaSpace {
+  height: clamp(84px, 9vw, 104px);
+}
+.meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(18px, 2.4vw, 28px);
+}
+
+/* the word */
+.word {
+  font-family: 'Unbounded', var(--font);
+  font-weight: 600;
+  font-size: 150px;
+}
+.outline {
+  fill: none;
+  stroke: var(--pl-ink);
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+}
+.fill {
+  fill: var(--pl-ink);
+}
+.glow {
+  fill: var(--pl-ink);
+  opacity: 0;
+}
+
+/* construction lines */
+.guide {
+  fill: none;
+  stroke: var(--pl-ink);
+  stroke-opacity: 0.22;
+  stroke-width: 1.4;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.label {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  fill: var(--pl-ink);
+  fill-opacity: 0.38;
+  opacity: 0;
+}
+
+/* tagline + counter */
+.tagline {
+  margin: 0;
+  padding-left: 0.6em; /* balances the trailing letter-spacing */
+  font-family: var(--font);
+  font-size: clamp(0.6rem, 0.52rem + 0.35vw, 0.78rem);
+  font-weight: 500;
+  letter-spacing: 0.6em;
+  line-height: 1;
+  color: var(--pl-ink);
+  white-space: nowrap;
+}
+.tagline span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(6px);
+}
+.counter {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+.num {
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  padding-left: 0.24em;
+  font-variant-numeric: tabular-nums;
+  color: var(--pl-ink);
+  opacity: 0.72;
+}
+.line {
+  position: relative;
+  display: block;
+  width: clamp(110px, 16vw, 180px);
+  height: 1px;
+  overflow: hidden;
+  background: rgba(245, 243, 239, 0.14);
+}
+.lineFill {
+  position: absolute;
+  inset: 0;
+  background: var(--pl-ink);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+@media (max-width: 480px) {
+  .tagline {
+    letter-spacing: 0.42em;
+    padding-left: 0.42em;
+  }
+}

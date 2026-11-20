@@ -1,0 +1,122 @@
+.footer {
+  /* always midnight, in both themes, with the liquid surface underneath */
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding-top: var(--space-8);
+}
+.footer > :not(canvas) {
+  position: relative;
+  z-index: 1;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1.6fr repeat(3, 1fr);
+  gap: var(--space-7);
+}
+.about {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  max-width: 24rem;
+}
+.blurb {
+  color: var(--muted);
+}
+.reach {
+  display: grid;
+  gap: 0.55rem;
+}
+.reach .mail {
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.reach li:first-child .mail {
+  font-weight: 600;
+  color: var(--ink);
+}
+.mail svg {
+  flex: none;
+  transform: translateY(0.15em);
+}
+.mail {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.5em;
+  font-weight: 600;
+  text-decoration: none;
+  width: fit-content;
+}
+.mail:hover {
+  color: var(--accent-text);
+}
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.socials a {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+}
+.socials a {
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.socials a:hover,
+.socials a:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.col ul {
+  display: grid;
+  gap: var(--space-2);
+}
+.col a {
+  text-decoration: none;
+  color: var(--ink-soft);
+}
+.col a:hover {
+  color: var(--accent-text);
+  text-decoration: underline;
+}
+.colTitle {
+  font-size: var(--step-0);
+  font-weight: 700;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: 0;
+  margin-bottom: var(--space-4);
+}
+.wordmark {
+  margin-top: var(--space-8);
+}
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-5);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .about {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+}

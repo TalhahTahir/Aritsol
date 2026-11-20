@@ -1,0 +1,109 @@
+.steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-5);
+  --p: 0;
+}
+/* dashed track + drawn line, behind the numbers */
+.steps::before,
+.steps::after {
+  content: '';
+  position: absolute;
+  top: 21px;
+  left: 22px;
+  right: calc(20% - 22px);
+  height: 2px;
+}
+.steps::before {
+  background: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 12px);
+}
+.steps::after {
+  background: var(--accent);
+  transform-origin: left;
+  transform: scaleX(var(--p));
+}
+.step {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+.num {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--line-strong);
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: var(--space-3);
+  position: relative;
+  z-index: 1;
+  transition: background-color 0.4s var(--ease), border-color 0.4s, color 0.4s, transform 0.4s var(--ease);
+}
+.title {
+  font-size: var(--step-1);
+  font-variation-settings: 'wdth' 95;
+  letter-spacing: -0.01em;
+  transition: color 0.4s;
+  color: var(--muted);
+}
+.desc {
+  color: var(--muted);
+  font-size: 0.97rem;
+  transition: color 0.4s;
+}
+.lit .num {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  transform: scale(1.08);
+}
+.lit .title {
+  color: var(--ink);
+}
+.lit .desc {
+  color: var(--ink-soft);
+}
+
+@media (max-width: 960px) {
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .steps::before,
+  .steps::after {
+    top: 22px;
+    bottom: 40px;
+    left: 21px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+  .steps::before {
+    background: repeating-linear-gradient(180deg, var(--line-strong) 0 6px, transparent 6px 12px);
+  }
+  .steps::after {
+    transform-origin: top;
+    transform: scaleY(var(--p));
+  }
+  .step {
+    padding: 0 0 var(--space-6) 68px;
+  }
+  .num {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .title {
+    margin-top: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .steps::after {
+    transform: none;
+  }
+}

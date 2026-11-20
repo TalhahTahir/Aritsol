@@ -1,0 +1,9 @@
+.aside {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  max-width: 52rem;
+}
+.asideTitle {
+  font-size: var(--step-3);
+}

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ARTISOL — Software studio for AI, web and enterprise systems</title>
+    <meta
+      name="description"
+      content="ARTISOL designs and builds custom AI systems, full-stack web apps, SaaS platforms and enterprise Java backends for clients worldwide — and ships its own SaaS products."
+    />
+    <meta name="theme-color" content="#F5F3EF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#08090B" media="(prefers-color-scheme: dark)" />
+
+    <!-- Open Graph / social previews (update the URL + image after you deploy) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ARTISOL" />
+    <meta property="og:title" content="ARTISOL — Software studio for AI, web and enterprise systems" />
+    <meta
+      property="og:description"
+      content="Custom AI, web, SaaS and enterprise software for clients worldwide — plus our own SaaS products."
+    />
+    <meta property="og:url" content="https://www.artisol.com/" />
+    <meta property="og:image" content="https://www.artisol.com/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Instrument+Serif:ital@0;1&family=Unbounded:wght@600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Apply the saved/system theme before React loads, so there is no flash -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('artisol-theme');
+          var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', saved || system);
+          // First visit this session: show the brand boot screen until React takes over
+          var seen = sessionStorage.getItem('artisol-intro-seen') === '1';
+          if (!seen) document.documentElement.classList.add('boot');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+    <style>
+      /* Charcoal boot screen painted before any JavaScript runs, so the preloader has no flash.
+         If the app never starts, it fades away by itself after 8s. */
+      html.boot body { overflow: hidden; }
+      html.boot body::before {
+        content: ''; position: fixed; inset: 0; z-index: 3001; background: #111215;
+        animation: boot-failsafe 0.6s 8s ease forwards;
+      }
+      @keyframes boot-failsafe { to { opacity: 0; visibility: hidden; } }
+    </style>
+  </head>
+  <body>
+    <noscript>ARTISOL needs JavaScript enabled to display this site.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

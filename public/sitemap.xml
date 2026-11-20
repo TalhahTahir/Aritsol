@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Update the domain if it is not www.artisol.com -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.artisol.com/</loc></url>
+  <url><loc>https://www.artisol.com/services</loc></url>
+  <url><loc>https://www.artisol.com/services/ai-machine-learning</loc></url>
+  <url><loc>https://www.artisol.com/services/web-full-stack</loc></url>
+  <url><loc>https://www.artisol.com/services/saas-product-development</loc></url>
+  <url><loc>https://www.artisol.com/services/enterprise-java</loc></url>
+  <url><loc>https://www.artisol.com/services/ai-agents-automation</loc></url>
+  <url><loc>https://www.artisol.com/services/agentic-ai-as-a-service</loc></url>
+  <url><loc>https://www.artisol.com/products</loc></url>
+  <url><loc>https://www.artisol.com/work</loc></url>
+  <url><loc>https://www.artisol.com/about</loc></url>
+  <url><loc>https://www.artisol.com/contact</loc></url>
+</urlset>

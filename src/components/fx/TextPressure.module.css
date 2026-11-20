@@ -1,0 +1,17 @@
+.pressure {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  line-height: 0.8;
+  font-size: 18vw; /* replaced by the measured size once mounted */
+  color: var(--ink);
+  user-select: none;
+  overflow: hidden;
+  padding-block: 0.06em 0.02em;
+}
+.letter {
+  display: inline-block;
+  font-variation-settings: 'wght' 300, 'wdth' 75, 'opsz' 96;
+  will-change: font-variation-settings;
+}

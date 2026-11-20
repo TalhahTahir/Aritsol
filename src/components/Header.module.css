@@ -1,0 +1,101 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1), border-color 0.25s, background-color 0.3s;
+}
+.scrolled {
+  border-bottom-color: var(--line);
+}
+/* slides up out of view while scrolling down; comes back on scroll up
+   (and whenever a keyboard user tabs into it) */
+.hidden {
+  transform: translateY(-100%);
+}
+.hidden:focus-within {
+  transform: none;
+}
+.bar {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+.brand {
+  text-decoration: none;
+  display: inline-flex;
+  flex: none;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.optional {
+  display: contents;
+}
+.cta {
+  min-height: 44px;
+  padding-inline: 1.15em;
+  font-size: 0.95rem;
+}
+
+/* Menu button: label + two lines that become a cross inside the open menu */
+.menuBtn {
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.6rem 0 1.1rem;
+  border-radius: var(--pill);
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.burger {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-content: center;
+  gap: 5px;
+  border-radius: 50%;
+}
+.burger i {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.35s var(--ease), width 0.35s var(--ease);
+}
+.menuBtn:hover .burger i:last-child {
+  width: 10px;
+  transform: translateX(3px);
+}
+
+@media (max-width: 860px) {
+  .cta {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  /* sound + theme move into the menu on small screens */
+  .optional {
+    display: none;
+  }
+  .menuLabel {
+    display: none;
+  }
+  .menuBtn {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,142 @@
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.gold,
+.panel {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+.gold {
+  background: var(--brand-gold);
+}
+.panel {
+  background: var(--brand-black);
+  color: var(--brand-white);
+  display: grid;
+  place-items: center;
+}
+.content {
+  display: grid;
+  justify-items: center;
+  gap: 1.4rem;
+  text-align: center;
+  padding-inline: var(--gutter);
+}
+
+/* ── cover: gold leads up, the panel follows with a soft curved edge ── */
+.cover .gold {
+  animation: rise 0.52s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+.cover .panel {
+  animation: rise-curved 0.55s 0.06s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+.cover .content {
+  animation: content-in 0.45s 0.36s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* ── hold ── */
+.hold .gold,
+.hold .panel {
+  transform: none;
+}
+
+/* ── lift: content leaves first, panel lifts away, gold trails it ── */
+.lift .content,
+.lift .extras {
+  animation: content-out 0.35s cubic-bezier(0.55, 0, 0.45, 1) both;
+}
+.lift .panel {
+  animation: lift-curved 0.72s 0.1s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+.lift .gold {
+  animation: lift 0.72s 0.2s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+.lift {
+  pointer-events: none;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes rise-curved {
+  from {
+    transform: translateY(100%);
+    border-radius: 50% 50% 0 0 / 14vh 14vh 0 0;
+  }
+  to {
+    transform: translateY(0);
+    border-radius: 0;
+  }
+}
+@keyframes lift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+@keyframes lift-curved {
+  from {
+    transform: translateY(0);
+    border-radius: 0;
+  }
+  to {
+    transform: translateY(-100%);
+    border-radius: 0 0 50% 50% / 0 0 14vh 14vh;
+  }
+}
+@keyframes content-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+@keyframes content-out {
+  to {
+    opacity: 0;
+    transform: translateY(-24px);
+    filter: blur(4px);
+  }
+}
+
+.labelMask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.label {
+  display: block;
+  font-size: clamp(2.4rem, 1rem + 5vw, 5.2rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-variation-settings: 'wdth' 78;
+  animation: label-up 0.6s 0.38s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.hold .label,
+.lift .label {
+  animation: none;
+}
+@keyframes label-up {
+  from {
+    transform: translateY(110%);
+  }
+}
+
+.extras {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}

@@ -1,0 +1,170 @@
+.section {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: var(--space-9);
+  min-height: 100vh;
+  display: grid;
+  align-items: center;
+}
+.inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--space-8);
+}
+
+.head {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 40rem;
+}
+.title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-variation-settings: normal;
+  font-size: clamp(3rem, 1.4rem + 5vw, 6.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.intro {
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.hint {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--brand-gold);
+  font-size: var(--step-1);
+}
+@media (hover: none) {
+  .hint {
+    display: none;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-8);
+  align-items: start;
+}
+/* editorial rhythm: the second portrait sits lower */
+.card:nth-child(2) {
+  margin-top: var(--space-9);
+}
+.card {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 460px;
+}
+.card:nth-child(2) {
+  justify-self: end;
+}
+
+/* Framed portrait: smoked glass over the fluid, with a glossy sheen */
+.portrait {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: rgba(245, 243, 239, 0.035);
+  border: 1px solid rgba(245, 243, 239, 0.14);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9);
+}
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.8s var(--ease), transform 1.2s var(--ease);
+}
+.portrait::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 32%),
+    linear-gradient(0deg, rgba(8, 9, 11, 0.55) 0%, rgba(8, 9, 11, 0) 40%);
+  pointer-events: none;
+}
+.mono img {
+  filter: grayscale(1) contrast(1.06);
+}
+.card:hover .mono img {
+  filter: grayscale(0) contrast(1);
+}
+.card:hover .portrait img {
+  transform: scale(1.03);
+}
+
+/* Cut-out portrait: the person stands directly on the ferrofluid */
+.cutout {
+  background: none;
+  border: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  overflow: visible;
+}
+.cutout::after {
+  display: none;
+}
+.cutout img {
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.75));
+}
+.cutout.mono img {
+  filter: grayscale(1) contrast(1.06) drop-shadow(0 30px 40px rgba(0, 0, 0, 0.75));
+}
+.card:hover .cutout.mono img {
+  filter: grayscale(0) drop-shadow(0 30px 40px rgba(0, 0, 0, 0.75));
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-serif);
+  font-size: clamp(8rem, 4rem + 10vw, 14rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 201, 0, 0.7);
+}
+
+.meta {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: start;
+}
+.name {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-variation-settings: normal;
+  font-size: var(--step-4);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.role {
+  color: var(--brand-gold);
+  font-weight: 600;
+}
+.bio {
+  color: var(--ink-soft);
+  max-width: 34em;
+  margin-bottom: var(--space-2);
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+  .card:nth-child(2) {
+    margin-top: 0;
+    justify-self: start;
+  }
+}

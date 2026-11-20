@@ -1,0 +1,104 @@
+.fallback {
+  padding-block: var(--space-8);
+}
+.rail {
+  position: relative;
+}
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr);
+  padding-top: calc(var(--header-h) + var(--space-5));
+  padding-bottom: var(--space-6);
+  gap: var(--space-5);
+}
+.head :global(.section-head) {
+  margin-bottom: 0;
+}
+.track {
+  display: flex;
+  gap: var(--space-6);
+  padding-inline: max(var(--gutter), calc((100vw - var(--max)) / 2));
+  will-change: transform;
+  min-height: 0;
+}
+.panel {
+  position: relative;
+  flex: none;
+  width: min(62vw, 860px);
+  height: 100%;
+  max-height: 520px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: grid;
+  align-items: end;
+  padding: clamp(1.5rem, 1rem + 2vw, 3rem);
+  border: 1px solid var(--line);
+}
+.glyph {
+  position: absolute;
+  top: -0.12em;
+  right: -0.04em;
+  font-size: clamp(10rem, 4rem + 18vw, 22rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  font-variation-settings: 'wdth' 75;
+  color: transparent;
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--ink) 18%, transparent);
+  pointer-events: none;
+  transform: translateX(calc((1 - var(--p, 0)) * 6%));
+}
+.panelBody {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+  max-width: 34rem;
+}
+.name {
+  font-size: var(--step-5);
+  line-height: 0.95;
+}
+.one {
+  font-size: var(--step-1);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.chip {
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+.progressWrap {
+  height: 2px;
+}
+.progressWrap::before,
+.progress {
+  content: '';
+  display: block;
+  height: 2px;
+  background: var(--line);
+}
+.progress {
+  margin-top: -2px;
+  background: var(--accent);
+  transform-origin: left;
+  transform: scaleX(var(--p, 0));
+}
+
+/* optional product screenshot, in place of the big initials */
+.shot {
+  position: absolute;
+  top: clamp(1.25rem, 0.8rem + 1.5vw, 2.25rem);
+  right: clamp(1.25rem, 0.8rem + 1.5vw, 2.25rem);
+  width: min(44%, 360px);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  box-shadow: 0 24px 50px -24px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}

@@ -1,0 +1,23 @@
+.header {
+  display: grid;
+  gap: var(--space-5);
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-7);
+}
+.context {
+  color: var(--muted);
+}
+.context a {
+  color: var(--ink-soft);
+}
+.title {
+  font-size: var(--step-5);
+  max-width: 14em;
+  animation: rise 0.8s var(--enter-delay, 0s) var(--ease) both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}

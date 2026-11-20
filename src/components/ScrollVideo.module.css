@@ -1,0 +1,34 @@
+.track {
+  position: relative;
+  height: 320vh;
+}
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--ink);
+}
+.sticky .video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.caption {
+  position: absolute;
+  left: var(--gutter);
+  bottom: var(--space-6);
+  max-width: 28rem;
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(10px);
+}
+.static {
+  display: grid;
+  gap: var(--space-3);
+}
+.static .video {
+  width: 100%;
+  border-radius: var(--radius-lg);
+}

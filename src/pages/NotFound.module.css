@@ -1,0 +1,25 @@
+.wrap {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  padding-block: var(--space-9);
+  min-height: 70vh;
+  align-content: center;
+}
+.code {
+  font-size: clamp(6rem, 3rem + 14vw, 14rem);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  font-variation-settings: 'wdth' 75;
+  color: var(--surface-2);
+  -webkit-text-stroke: 2px var(--line-strong);
+}
+.title {
+  font-size: var(--step-4);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}

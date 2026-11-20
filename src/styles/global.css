@@ -1,0 +1,580 @@
+/* ─────────────────────────────────────────────────────────────
+   ARTISOL design tokens
+   Brand palette: Midnight Black #08090B, Pure White #F5F3EF,
+   Golden Yellow #FFC900. Everything else is a tint of these three.
+
+   --accent       gold as a FILL (buttons, bars, dots, highlights)
+   --accent-text  gold as TEXT. Gold text is unreadable on white, so in
+                  light mode this is black and the gold moves to the
+                  underline / marker behind it.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --brand-black: #08090b;
+  --brand-white: #f5f3ef;
+  --brand-gold: #ffc900;
+}
+
+:root,
+:root[data-theme='light'] {
+  --bg: #f5f3ef;
+  --surface: #fcfbf8;
+  --surface-2: #ebe8e1;
+  --ink: #08090b;
+  --ink-soft: #2b2c30;
+  --muted: #67645e;
+  --line: #dcd8cf;
+  --line-strong: #bfb9ad;
+  --accent: #ffc900;
+  --accent-ink: #08090b;
+  --accent-text: #08090b;
+  --accent-soft: #fff0b8;
+  --signal: #08090b;
+  --signal-soft: #fff0b8;
+  --mist: #e4e0d7;
+  --focus: #08090b;
+  --shadow: 0 1px 2px rgba(8, 9, 11, 0.05), 0 18px 40px -18px rgba(8, 9, 11, 0.22);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #08090b;
+  --surface: #111215;
+  --surface-2: #1a1b1f;
+  --ink: #f5f3ef;
+  --ink-soft: #d4d1ca;
+  --muted: #8f8c86;
+  --line: #222328;
+  --line-strong: #36373d;
+  --accent: #ffc900;
+  --accent-ink: #08090b;
+  --accent-text: #ffc900;
+  --accent-soft: #241d05;
+  --signal: #ffc900;
+  --signal-soft: #241d05;
+  --mist: #16171b;
+  --focus: #ffc900;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 20px 48px -20px rgba(0, 0, 0, 0.8);
+  color-scheme: dark;
+}
+
+:root {
+  --font: 'Bricolage Grotesque', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif; /* hero headline */
+
+  /* Type scale (1.25 ratio, fluid at the top end) */
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: 1.5625rem;
+  --step-3: clamp(1.75rem, 1.4rem + 1.4vw, 2.4rem);
+  --step-4: clamp(2.2rem, 1.6rem + 2.6vw, 3.6rem);
+  --step-5: clamp(2.8rem, 1.6rem + 5vw, 6rem);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --pill: 999px;
+
+  --max: 1240px;
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --header-h: 72px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--step-0);
+  font-variation-settings: 'wdth' 100;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure,
+dl,
+dd {
+  margin: 0;
+}
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+  padding: 0;
+}
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* ── Type ──────────────────────────────────────────────────── */
+.display,
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  font-variation-settings: 'wdth' 82;
+  text-wrap: balance;
+}
+h1 {
+  font-size: var(--step-5);
+  letter-spacing: -0.035em;
+  line-height: 0.96;
+}
+h2 {
+  font-size: var(--step-4);
+  letter-spacing: -0.03em;
+}
+h3 {
+  font-size: var(--step-2);
+  line-height: 1.15;
+  font-variation-settings: 'wdth' 90;
+}
+p {
+  text-wrap: pretty;
+}
+.lede {
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 38em;
+}
+.muted {
+  color: var(--muted);
+}
+.measure {
+  max-width: 62ch;
+}
+
+/* ── Layout ────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: calc(var(--max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.section {
+  padding-block: var(--space-9);
+}
+.section--tight {
+  padding-block: var(--space-8);
+}
+.section-head {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: var(--space-7);
+  max-width: 46rem;
+}
+.section-head p {
+  color: var(--ink-soft);
+  font-size: var(--step-1);
+  line-height: 1.5;
+}
+.rule {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.btn {
+  --btn-bg: var(--ink);
+  --btn-ink: var(--bg);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  min-height: 48px;
+  padding: 0.7em 1.4em;
+  border-radius: var(--pill);
+  border: 1px solid transparent;
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  font-weight: 600;
+  font-size: var(--step-0);
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.15s var(--ease), background-color 0.2s var(--ease), border-color 0.2s;
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn:active {
+  transform: translateY(0);
+}
+.btn--accent {
+  --btn-bg: var(--accent);
+  --btn-ink: var(--accent-ink);
+}
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-ink: var(--ink);
+  border-color: var(--line-strong);
+}
+.btn--ghost:hover {
+  border-color: var(--ink);
+}
+.btn[aria-disabled='true'] {
+  opacity: 0.55;
+  pointer-events: none;
+}
+.btn svg {
+  flex: none;
+}
+
+.link {
+  font-weight: 600;
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-text);
+  text-decoration-thickness: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+.link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ── Small pieces ──────────────────────────────────────────── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0;
+  list-style: none;
+}
+.chip {
+  font-size: var(--step--1);
+  padding: 0.3em 0.75em;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--step--1);
+  font-weight: 600;
+  padding: 0.3em 0.8em;
+  border-radius: var(--pill);
+  background: var(--signal-soft);
+  color: var(--signal);
+}
+.status::before {
+  background: var(--accent) !important;
+}
+.status::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status--live {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+}
+.skip-link:focus {
+  top: 1rem;
+}
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.page-loading {
+  min-height: 70vh;
+}
+
+@media (max-width: 720px) {
+  .section {
+    padding-block: var(--space-8);
+  }
+  .section--tight {
+    padding-block: var(--space-7);
+  }
+  .section-head {
+    margin-bottom: var(--space-6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Scroll reveals (see components/fx/Reveal.jsx) ─────────── */
+.reveal {
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  transition-delay: var(--delay, 0s);
+}
+.reveal--up {
+  opacity: 0;
+  transform: translateY(40px);
+}
+.reveal--left {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+.reveal--scale {
+  opacity: 0;
+  transform: scale(0.94);
+}
+/* the clip goes on the child: a fully clipped element never counts as "in view" */
+.reveal--clip > * {
+  clip-path: inset(100% 0 0 0 round var(--radius-lg));
+  transition: clip-path 1.1s cubic-bezier(0.76, 0, 0.24, 1);
+  transition-delay: var(--delay, 0s);
+}
+.reveal--clip.is-in > * {
+  clip-path: inset(0 0 0 0 round var(--radius-lg));
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal--clip > * {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+}
+
+/* ── Brand surfaces ─────────────────────────────────────────
+   Fixed black / white / gold panels that look the same in both themes.
+   They redefine the tokens locally, so anything inside (buttons, chips,
+   status pills, links) adapts automatically. */
+.tone-gold,
+.tone-black,
+.tone-white {
+  color: var(--ink);
+}
+/* doubled class = higher specificity, so a component's own background never hides the brand surface */
+.tone-gold.tone-gold {
+  background: var(--brand-gold);
+}
+.tone-black.tone-black {
+  background: var(--brand-black);
+}
+.tone-white.tone-white {
+  background: var(--brand-white);
+}
+.tone-gold {
+  --bg: var(--brand-gold);
+  --ink: var(--brand-black);
+  --ink-soft: rgba(8, 9, 11, 0.8);
+  --muted: rgba(8, 9, 11, 0.62);
+  --line: rgba(8, 9, 11, 0.14);
+  --line-strong: rgba(8, 9, 11, 0.32);
+  --surface: rgba(8, 9, 11, 0.05);
+  --surface-2: rgba(8, 9, 11, 0.09);
+  --accent: var(--brand-black);
+  --accent-ink: var(--brand-white);
+  --accent-text: var(--brand-black);
+  --accent-soft: rgba(8, 9, 11, 0.1);
+  --signal: var(--brand-black);
+  --signal-soft: rgba(8, 9, 11, 0.1);
+  --focus: var(--brand-black);
+}
+.tone-black {
+  --bg: var(--brand-black);
+  --ink: var(--brand-white);
+  --ink-soft: rgba(245, 243, 239, 0.8);
+  --muted: rgba(245, 243, 239, 0.58);
+  --line: rgba(245, 243, 239, 0.12);
+  --line-strong: rgba(245, 243, 239, 0.28);
+  --surface: rgba(245, 243, 239, 0.04);
+  --surface-2: rgba(245, 243, 239, 0.08);
+  --accent: var(--brand-gold);
+  --accent-ink: var(--brand-black);
+  --accent-text: var(--brand-gold);
+  --accent-soft: rgba(255, 201, 0, 0.14);
+  --signal: var(--brand-gold);
+  --signal-soft: rgba(255, 201, 0, 0.14);
+  --focus: var(--brand-gold);
+}
+.tone-white {
+  --bg: var(--brand-white);
+  --ink: var(--brand-black);
+  --ink-soft: #2b2c30;
+  --muted: #67645e;
+  --line: #dcd8cf;
+  --line-strong: #bfb9ad;
+  --surface: #fcfbf8;
+  --surface-2: #e7e3db;
+  --accent: var(--brand-gold);
+  --accent-ink: var(--brand-black);
+  --accent-text: var(--brand-black);
+  --accent-soft: #fff0b8;
+  --signal: var(--brand-black);
+  --signal-soft: #fff0b8;
+  --focus: var(--brand-black);
+}
+
+@keyframes brand-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+main:focus {
+  outline: none;
+}
+
+/* ── Directional hover fill (see src/fx/directional-fill.js) ─── */
+:is(.dfill, .btn--ghost) {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  /* where the gold layer waits: below the element unless an edge is set */
+  --fx: 0%;
+  --fy: 101%;
+  transition: color 0.35s var(--ease), border-color 0.35s var(--ease), transform 0.15s var(--ease);
+}
+:is(.dfill, .btn--ghost)::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background: var(--dfill-bg, var(--accent));
+  transform: translate(var(--fx), var(--fy));
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  pointer-events: none;
+}
+:is(.dfill, .btn--ghost)[data-edge='left'] {
+  --fx: -101%;
+  --fy: 0%;
+}
+:is(.dfill, .btn--ghost)[data-edge='right'] {
+  --fx: 101%;
+  --fy: 0%;
+}
+:is(.dfill, .btn--ghost)[data-edge='top'] {
+  --fx: 0%;
+  --fy: -101%;
+}
+:is(.dfill, .btn--ghost)[data-edge='bottom'] {
+  --fx: 0%;
+  --fy: 101%;
+}
+:is(.dfill, .btn--ghost)[data-snap]::before {
+  transition: none;
+}
+:is(.dfill, .btn--ghost):is([data-fill='on'], :focus-visible) {
+  --fx: 0%;
+  --fy: 0%;
+  /* !important: the fill must win over any component's own hover colour */
+  color: var(--dfill-ink, var(--accent-ink)) !important;
+  border-color: var(--dfill-bg, var(--accent)) !important;
+}
+/* everything inside turns the same readable colour while filled */
+:is(.dfill, .btn--ghost):is([data-fill='on'], :focus-visible) * {
+  color: inherit !important;
+}
+@media (hover: none) {
+  :is(.dfill, .btn--ghost):active {
+    --fx: 0%;
+    --fy: 0%;
+    color: var(--dfill-ink, var(--accent-ink));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.dfill, .btn--ghost)::before {
+    transform: none !important;
+    opacity: 0;
+    transition: opacity 0.2s !important;
+  }
+  :is(.dfill, .btn--ghost):is([data-fill='on'], :focus-visible)::before {
+    opacity: 1;
+  }
+}
+
+/* Page content sits above the site-wide ferrofluid layer */
+main {
+  position: relative;
+  z-index: 1;
+}
+html.fluid-holding,
+html.fluid-holding * {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grabbing !important;
+}

@@ -1,0 +1,340 @@
+/* ── Form + details ─────────────────────────────────────── */
+.contact {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(2rem, 1rem + 4vw, 5rem);
+  align-items: start;
+}
+
+.formCard {
+  padding: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.form {
+  display: grid;
+  gap: var(--space-5);
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+.field {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+}
+.label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.optional {
+  margin-left: 0.4em;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--step-0);
+  line-height: 1.4;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), background-color 0.2s;
+}
+.input::placeholder {
+  color: var(--muted);
+  opacity: 0.85;
+}
+.input:hover {
+  border-color: var(--muted);
+}
+.input:focus,
+.input:focus-visible {
+  outline: none;
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+textarea.input {
+  min-height: 150px;
+  resize: vertical;
+}
+.invalid,
+.invalid:hover {
+  border-color: #d64545;
+}
+.invalid:focus {
+  box-shadow: 0 0 0 3px rgba(214, 69, 69, 0.25);
+}
+
+.selectWrap {
+  position: relative;
+}
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.8rem;
+  cursor: pointer;
+}
+.select option,
+.select optgroup {
+  background: var(--surface);
+  color: var(--ink);
+}
+.placeholder {
+  color: var(--muted);
+}
+.chevron {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  translate: 0 -50%;
+  pointer-events: none;
+  color: var(--muted);
+}
+
+.err,
+.formError {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: var(--step--1);
+  color: #d64545;
+}
+[data-theme='dark'] .err,
+[data-theme='dark'] .formError {
+  color: #ff8a80;
+}
+.formError {
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.formError svg,
+.err svg {
+  flex: none;
+}
+
+.submit {
+  width: 100%;
+  justify-content: center;
+  min-height: 56px;
+  margin-top: var(--space-2);
+}
+.submit svg {
+  transition: transform 0.25s var(--ease);
+}
+.submit:hover svg {
+  transform: translateX(4px);
+}
+.submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+.note {
+  margin-top: calc(var(--space-3) * -1);
+  text-align: center;
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+/* visually hidden, but still in the form for bots */
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* success state */
+.done {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+  padding-block: var(--space-6);
+}
+.doneIcon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 26px;
+}
+.doneTitle {
+  font-size: var(--step-3);
+  letter-spacing: -0.02em;
+}
+
+/* details column */
+.info {
+  display: grid;
+}
+.item {
+  display: flex;
+  gap: var(--space-4);
+  padding-block: var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+.item:first-child {
+  padding-top: var(--space-2);
+}
+.item:last-child {
+  border-bottom: 0;
+}
+.item > div {
+  display: grid;
+  justify-items: start;
+  gap: 0.3rem;
+  min-width: 0;
+}
+.tile {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--accent-text);
+  font-size: 19px;
+}
+.waTile {
+  color: #1faa59;
+}
+.itemTitle {
+  font-size: var(--step-0);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+}
+.strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+.strong:hover {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.email {
+  word-break: break-all;
+}
+.sub,
+.address {
+  font-style: normal;
+  font-size: var(--step--1);
+  color: var(--muted);
+  line-height: 1.55;
+}
+.link {
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--ink);
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+}
+.link:hover {
+  color: var(--accent-text);
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: 0.3rem;
+}
+.socials a {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  color: var(--ink);
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s var(--ease);
+}
+.socials a:hover,
+.socials a:focus-visible {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  transform: translateY(-2px);
+}
+
+/* ── Next steps + FAQ ───────────────────────────────────── */
+.h2 {
+  font-size: var(--step-3);
+  margin-bottom: var(--space-5);
+}
+.next {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+.next li {
+  display: flex;
+  gap: var(--space-4);
+}
+.num {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 700;
+}
+.nTitle {
+  font-size: var(--step-1);
+  font-variation-settings: 'wdth' 95;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+}
+.faq {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: var(--space-7);
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .contact {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 860px) {
+  .next,
+  .faq {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+}
+@media (max-width: 560px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
