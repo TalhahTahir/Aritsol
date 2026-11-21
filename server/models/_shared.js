@@ -2,8 +2,8 @@
 // for friendly messages first; these rules are the database's own last line of defence.)
 
 export const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const WEB_URL = /^https?:\/\/[^\s<>"']+$/i;
-const IMAGE_URL = /^(https:\/\/[^\s<>"']+|\/[^\s<>"'/\\][^\s<>"']*)$/i; // https link or a file in /public
+export const WEB_URL = /^https?:\/\/[^\s<>"']+$/i;
+export const IMAGE_URL = /^(https:\/\/[^\s<>"']+|\/[^\s<>"'/\\][^\s<>"']*)$/i; // https link or a file in /public
 
 export const text = (max, required = false) => ({
   type: String,

@@ -52,11 +52,13 @@ export const TYPES = {
       { name: 'title', label: 'Project name', type: 'text', required: true, max: 120 },
       { name: 'practice', label: 'Service', type: 'select', required: true, optionsFrom: 'practices', help: 'Used for filtering on the Work page.' },
       { name: 'summary', label: 'Description', type: 'textarea', required: true, max: 600 },
-      { name: 'image', label: 'Image', type: 'image', help: 'Screenshot or cover, 4:3 works best (e.g. 1280×960).' },
+      { name: 'image', label: 'Main image', type: 'image', help: 'Used on the project card and in the homepage 3D carousel. 4:3 works best (e.g. 1280×960).' },
+      { name: 'gallery', label: 'More images (gallery)', type: 'gallery', max: 12, help: 'Extra screenshots. Visitors see them when they open the project from its card.' },
       { name: 'live', path: 'links.live', label: 'Deployed URL', type: 'url', placeholder: 'https://…' },
       { name: 'code', path: 'links.code', label: 'Code URL', type: 'url', placeholder: 'https://github.com/…' },
       { name: 'stack', label: 'Tech stack', type: 'list', max: 12, help: 'One per line, e.g. “React”.' },
       { name: 'tone', label: 'Cover colour (when no image)', type: 'select', options: TONE_OPTIONS, default: 'black' },
+      { name: 'showcase', label: 'Show in the homepage 3D carousel', type: 'bool', default: true },
       { name: 'sample', label: 'Mark as sample project', type: 'bool', default: false },
       { name: 'id', label: 'URL id', type: 'slug', help: 'Optional. Made from the name if empty.' },
     ],
@@ -144,6 +146,7 @@ function cleanField(f, raw, errors, where) {
   const label = f.label;
   switch (f.type) {
     case 'bool':
+      if (raw === undefined || raw === null) return f.default ?? false; // not sent: keep the default
       return raw === true || raw === 'true' || raw === 'on';
     case 'select': {
       const v = clean(raw, 80);
@@ -169,6 +172,13 @@ function cleanField(f, raw, errors, where) {
     }
     case 'slug':
       return slugify(raw);
+    case 'gallery': {
+      const arr = (Array.isArray(raw) ? raw : String(raw ?? '').split('\n')).map((x) => clean(x, 500)).filter(Boolean);
+      const unique = [...new Set(arr)];
+      if (unique.length > (f.max || 12)) errors[where] = `Up to ${f.max || 12} images.`;
+      if (unique.some((v) => !SECURE_URL.test(v) && !LOCAL_PATH.test(v))) errors[where] = 'Each image must be uploaded or a link starting with https://';
+      return unique.slice(0, f.max || 12);
+    }
     case 'list': {
       const arr = Array.isArray(raw) ? raw : String(raw ?? '').split('\n');
       return arr
@@ -225,7 +235,7 @@ export function blank(type) {
   const out = {};
   TYPES[type].fields.forEach((f) => {
     const v =
-      f.default ?? (f.type === 'list' || f.type === 'objectList' ? [] : f.type === 'bool' ? false : '');
+      f.default ?? (['list', 'objectList', 'gallery'].includes(f.type) ? [] : f.type === 'bool' ? false : '');
     setPath(out, f.path || f.name, v);
   });
   return out;

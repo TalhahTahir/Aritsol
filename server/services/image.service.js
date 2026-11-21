@@ -75,8 +75,12 @@ export function publicIdFromUrl(url) {
 export async function releaseImage(url) {
   const publicId = publicIdFromUrl(url);
   if (!publicId) return;
-  const [a, b] = await Promise.all([Product.countDocuments({ image: url }), Work.countDocuments({ image: url })]);
-  if (a + b > 0) return;
+  const counts = await Promise.all([
+    Product.countDocuments({ image: url }),
+    Work.countDocuments({ image: url }),
+    Work.countDocuments({ gallery: url }), // matches when the gallery list contains it
+  ]);
+  if (counts.some((n) => n > 0)) return;
   try {
     await getCloudinary()?.uploader.destroy(publicId, { resource_type: 'image', invalidate: true });
   } catch (err) {

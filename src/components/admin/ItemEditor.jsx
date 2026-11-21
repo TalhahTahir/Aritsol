@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiAlertCircle, FiArrowDown, FiArrowUp, FiImage, FiPlus, FiTrash2, FiUploadCloud, FiX } from 'react-icons/fi';
+import { FiAlertCircle, FiArrowDown, FiArrowLeft, FiArrowRight, FiArrowUp, FiImage, FiPlus, FiTrash2, FiUploadCloud, FiX } from 'react-icons/fi';
 import { TYPES, blank, getPath, sanitize, setPath } from '../../../shared/schema.js';
 import { saveItem, uploadImage, useContent } from '../../content/store';
 import { adminUi } from '../../admin/ui';
@@ -16,7 +16,8 @@ export default function ItemEditor({ type, item }) {
   const editing = !!item?._id;
   const navigate = useNavigate();
   const { practices } = useContent();
-  const start = useMemo(() => structuredClone(item || blank(type)), [item, type]);
+  // older items may miss newer fields: fill those with their defaults
+  const start = useMemo(() => structuredClone({ ...blank(type), ...(item || {}) }), [item, type]);
   const [value, setValue] = useState(start);
   const [errors, setErrors] = useState({});
   const [busy, setBusy] = useState(false);
@@ -28,8 +29,12 @@ export default function ItemEditor({ type, item }) {
   const dirty = JSON.stringify(value) !== JSON.stringify(start);
   const close = () => (dirty && !askDiscard ? setAskDiscard(true) : adminUi.closeEditor());
 
+  // v can be a value or a function of the current value (used by uploads that finish later)
   const update = (f, v) => {
-    setValue((x) => setPath(structuredClone(x), f.path || f.name, v));
+    setValue((x) => {
+      const path = f.path || f.name;
+      return setPath(structuredClone(x), path, typeof v === 'function' ? v(getPath(x, path)) : v);
+    });
     setErrors((e) => {
       const next = { ...e };
       Object.keys(next).forEach((k) => (k === f.name || k.startsWith(`${f.name}.`)) && delete next[k]);
@@ -189,6 +194,9 @@ function Field({ f, value, error, errors, onChange, options, setUploading, folde
     case 'objectList':
       control = <ObjectList f={f} value={value || []} onChange={onChange} errors={errors} />;
       break;
+    case 'gallery':
+      control = <GalleryField f={f} common={common} value={value || []} onChange={onChange} setUploading={setUploading} folder={folder} />;
+      break;
     case 'image':
       control = <ImageField f={f} common={common} value={value || ''} onChange={onChange} setUploading={setUploading} folder={folder} />;
       break;
@@ -280,6 +288,115 @@ function ImageField({ f, common, value, onChange, setUploading, folder }) {
           </p>
         )}
       </div>
+    </div>
+  );
+}
+
+/** Several images: upload many at once or paste links; reorder and remove. */
+function GalleryField({ f, common, value, onChange, setUploading, folder }) {
+  const fileRef = useRef(null);
+  const [link, setLink] = useState('');
+  const [progress, setProgress] = useState('');
+  const [err, setErr] = useState('');
+  const max = f.max || 12;
+  const room = max - value.length;
+
+  const pick = async (e) => {
+    const files = [...(e.target.files || [])];
+    e.target.value = '';
+    if (!files.length) return;
+    if (files.length > room) setErr(`Only ${room} more image${room === 1 ? '' : 's'} fit (${max} maximum). The rest were skipped.`);
+    else setErr('');
+    const todo = files.slice(0, room);
+    setUploading(true);
+    for (let i = 0; i < todo.length; i++) {
+      setProgress(`Uploading ${i + 1} of ${todo.length}…`);
+      try {
+        const url = await uploadImage(todo[i], folder);
+        // add to the latest list (links may have been added meanwhile); show each one as soon as it is up
+        onChange((cur) => [...(cur || []), url].slice(0, max));
+      } catch (error) {
+        setErr(`${todo[i].name}: ${error.message}`);
+      }
+    }
+    setProgress('');
+    setUploading(false);
+  };
+
+  const addLink = () => {
+    const v = link.trim();
+    if (!v) return;
+    if (!/^https:\/\//i.test(v)) return setErr('Image links must start with https://');
+    if (value.includes(v)) return setErr('That image is already in the gallery.');
+    if (room <= 0) return setErr(`The gallery is full (${max} images).`);
+    onChange([...value, v]);
+    setLink('');
+    setErr('');
+  };
+
+  const move = (i, d) => {
+    const next = [...value];
+    [next[i], next[i + d]] = [next[i + d], next[i]];
+    onChange(next);
+  };
+
+  return (
+    <div className={s.gallery}>
+      {value.length > 0 && (
+        <ul role="list" className={s.galleryGrid}>
+          {value.map((src, i) => (
+            <li key={src} className={s.galleryItem}>
+              <img src={src} alt={`Gallery image ${i + 1}`} />
+              <span className={s.galleryNum}>{i + 1}</span>
+              <div className={s.galleryTools}>
+                <button type="button" onClick={() => move(i, -1)} disabled={i === 0} aria-label={`Move image ${i + 1} earlier`}>
+                  <FiArrowLeft />
+                </button>
+                <button type="button" onClick={() => move(i, 1)} disabled={i === value.length - 1} aria-label={`Move image ${i + 1} later`}>
+                  <FiArrowRight />
+                </button>
+                <button type="button" onClick={() => onChange(value.filter((_, j) => j !== i))} aria-label={`Remove image ${i + 1}`}>
+                  <FiX />
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className={s.galleryAdd}>
+        <button type="button" className="btn btn--ghost" onClick={() => fileRef.current?.click()} disabled={!!progress || room <= 0} data-field={f.name}>
+          <FiUploadCloud aria-hidden /> {progress || 'Upload images'}
+        </button>
+        <input ref={fileRef} type="file" multiple accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden onChange={pick} />
+        <span className={s.galleryCount}>
+          {value.length} / {max}
+        </span>
+      </div>
+      <div className={s.galleryLink}>
+        <input
+          {...common}
+          className={s.input}
+          type="text"
+          inputMode="url"
+          placeholder="…or paste an image link (https://…)"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault(); // add the link, don't save the form
+              addLink();
+            }
+          }}
+        />
+        <button type="button" className="btn btn--ghost" onClick={addLink} disabled={!link.trim()}>
+          <FiPlus aria-hidden /> Add
+        </button>
+      </div>
+      {err && (
+        <p className={s.err}>
+          <FiAlertCircle aria-hidden /> {err}
+        </p>
+      )}
     </div>
   );
 }

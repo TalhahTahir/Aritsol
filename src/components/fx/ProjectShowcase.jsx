@@ -219,12 +219,61 @@ const freeTarget = (gl, t) => {
   if (t.rb) gl.deleteRenderbuffer(t.rb);
 };
 
+/** A branded 4:3 card for a project that has no usable image: service, title and the ARTISOL mark. */
+function titleCard(item, practiceName = '') {
+  const W = 1280;
+  const H = 960;
+  const c = document.createElement('canvas');
+  c.width = W;
+  c.height = H;
+  const g = c.getContext('2d');
+  const tones = { gold: ['#FFC900', '#08090B'], white: ['#F5F3EF', '#08090B'], black: ['#08090B', '#F5F3EF'] };
+  const [bg, ink] = tones[item.tone] || tones.black;
+  g.fillStyle = bg;
+  g.fillRect(0, 0, W, H);
+  // soft diagonal light
+  const grad = g.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, 'rgba(255,255,255,0.10)');
+  grad.addColorStop(1, 'rgba(0,0,0,0.12)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, W, H);
+
+  const font = getComputedStyle(document.documentElement).getPropertyValue('--font').trim() || 'sans-serif';
+  g.fillStyle = ink;
+  g.globalAlpha = 0.6;
+  g.font = `600 40px ${font}`;
+  g.fillText((practiceName || 'Project').toUpperCase(), 96, 150);
+  g.globalAlpha = 1;
+
+  // wrap the title onto up to 4 lines
+  g.font = `700 104px ${font}`;
+  const words = String(item.title || '').split(/\s+/);
+  const lines = [];
+  let line = '';
+  for (const w of words) {
+    const test = line ? `${line} ${w}` : w;
+    if (g.measureText(test).width > W - 192 && line) {
+      lines.push(line);
+      line = w;
+    } else line = test;
+  }
+  if (line) lines.push(line);
+  lines.slice(0, 4).forEach((l, i) => g.fillText(i === 3 && lines.length > 4 ? `${l}…` : l, 96, 330 + i * 118));
+
+  g.globalAlpha = 0.55;
+  g.font = `600 36px ${font}`;
+  g.fillText('ARTISOL', 96, H - 96);
+  g.globalAlpha = 1;
+  return c;
+}
+
 export default function ProjectShowcase(props) {
   const { work } = useContent();
-  const items = useMemo(() => work.filter((w) => w.image), [work]);
+  // every project gets a screen; ones without an image get a drawn title card
+  const items = useMemo(() => work.filter((w) => w.showcase !== false).slice(0, 12), [work]);
   if (!items.length) return null;
   // a new set of projects or images rebuilds the scene from scratch
-  const key = items.map((w) => `${w.id}:${w.image}`).join('|');
+  const key = items.map((w) => `${w.id}:${w.image}:${w.title}:${w.practice}`).join('|');
   return <Showcase key={key} items={items} {...props} />;
 }
 
@@ -302,19 +351,31 @@ function Showcase({ variant = 'section', items: ITEMS }) {
 
     // ── textures ──
     const tex = ITEMS.map(() => ({ t: gl.createTexture(), loaded: false }));
+    const upload = (i, source) => {
+      gl.bindTexture(gl.TEXTURE_2D, tex[i].t);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      tex[i].loaded = true;
+    };
+    const useCard = (i) => upload(i, titleCard(ITEMS[i], getPractice(ITEMS[i].practice)?.short));
     ITEMS.forEach((item, i) => {
+      if (!item.image) return useCard(i);
       const img = new Image();
       img.decoding = 'async';
+      // images from Cloudinary or other sites must be requested with CORS, or WebGL refuses to use them
+      if (new URL(item.image, window.location.href).origin !== window.location.origin) img.crossOrigin = 'anonymous';
       img.onload = () => {
         if (!alive) return;
-        gl.bindTexture(gl.TEXTURE_2D, tex[i].t);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        tex[i].loaded = true;
+        try {
+          upload(i, img);
+        } catch {
+          useCard(i); // the other site does not allow it: show a title card instead of a blank screen
+        }
       };
+      img.onerror = () => alive && useCard(i);
       img.src = item.image;
     });
 
@@ -645,6 +706,30 @@ function Showcase({ variant = 'section', items: ITEMS }) {
   return (
     <div className={`${s.wrap} ${hero ? s.hero : ''}`}>
       <canvas ref={canvasRef} className={s.canvas} aria-hidden="true" />
+
+      {hero && (
+        <>
+          {/* shows which project a click will open */}
+          <p className={`${s.hoverTag} ${hovered >= 0 ? s.hoverTagOn : ''}`} aria-hidden="true">
+            <span>{shown.title}</span>
+            <FiArrowUpRight />
+          </p>
+          {/* the same projects as plain links, for keyboard and screen-reader users */}
+          <ul className="visually-hidden">
+            {ITEMS.map((w) => (
+              <li key={w.id}>
+                {w.links?.live ? (
+                  <a href={w.links.live} target="_blank" rel="noopener noreferrer">
+                    {w.title} (opens the live project)
+                  </a>
+                ) : (
+                  <Link to={`/work#${w.id}`}>{w.title}</Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
 
       {!hero && (
         <div className={`${hero ? '' : 'container'} ${s.bar}`}>

@@ -1,22 +1,41 @@
-import { FiArrowUpRight, FiGithub } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiArrowUpRight, FiGithub, FiImage } from 'react-icons/fi';
 import { useContent } from '../content/store';
 import { AdminItemTools } from './admin/AdminTools.jsx';
+import Lightbox from './Lightbox.jsx';
 import s from './WorkCard.module.css';
 
 export default function WorkCard({ item }) {
   const { getPractice } = useContent();
   const practice = getPractice(item.practice);
+  const [viewer, setViewer] = useState(false);
+  // main image first, then the gallery
+  const photos = [item.image, ...(item.gallery || [])].filter(Boolean);
+  const hasGallery = (item.gallery || []).length > 0;
+  const art = item.image ? <img src={item.image} alt={`Screenshot of ${item.title}`} loading="lazy" /> : <CoverArt seed={item.id} />;
   return (
     <article id={item.id} className={s.card} data-keep-clear>
       <AdminItemTools type="work" item={item} />
       <div className={`${s.cover} ${item.tone ? `tone-${item.tone}` : ''}`}>
-        {item.image ? (
-          <img src={item.image} alt={`Screenshot of ${item.title}`} loading="lazy" />
+        {hasGallery ? (
+          <button type="button" className={s.coverBtn} onClick={() => setViewer(true)} aria-label={`View ${photos.length} images of ${item.title}`}>
+            {art}
+            <span className={s.photos}>
+              <FiImage aria-hidden /> {photos.length} images
+            </span>
+          </button>
         ) : (
-          <CoverArt seed={item.id} />
+          art
         )}
         {item.sample && <span className={s.sample}>Sample project</span>}
       </div>
+      {viewer && (
+        <Lightbox
+          title={item.title}
+          images={photos.map((src, i) => ({ src, alt: `${item.title}, image ${i + 1} of ${photos.length}` }))}
+          onClose={() => setViewer(false)}
+        />
+      )}
       <div className={s.body}>
         <p className={s.practice}>{practice?.short}</p>
         <h3 className={s.title}>{item.title}</h3>

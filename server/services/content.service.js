@@ -23,6 +23,9 @@ const checkId = (id) => {
   return id;
 };
 
+// main image plus gallery images of an item
+const imagesOf = (doc) => [...new Set([doc?.image, ...(doc?.gallery || [])].filter(Boolean))];
+
 const invalid = (fields) => httpError(400, 'Please fix the highlighted fields.', { fields });
 
 /** Clean the input with the shared rules (friendly messages), before Mongoose validates it again. */
@@ -116,7 +119,8 @@ export async function updateItem(type, id, input) {
   if (type === 'practices' && before.slug !== after.slug) {
     await Work.updateMany({ practice: before.slug }, { $set: { practice: after.slug } });
   }
-  if (before.image && before.image !== after.image) await releaseImage(before.image);
+  const still = imagesOf(after);
+  for (const url of imagesOf(before)) if (!still.includes(url)) await releaseImage(url);
   return after;
 }
 
@@ -132,7 +136,7 @@ export async function deleteItem(type, id) {
     }
   }
   await Model.deleteOne({ _id: before._id });
-  if (before.image) await releaseImage(before.image);
+  for (const url of imagesOf(before)) await releaseImage(url);
   return before;
 }
 
